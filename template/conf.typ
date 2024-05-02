@@ -91,15 +91,15 @@
   if autores.len() > 1 {
     autores-title = autores-title + "es"
   }
-  let title = align(center)[
+  let title = align(center + horizon)[
     #grid(row-gutter: 11pt,
-      text(22pt, titulo)
+      text(25pt, titulo)
     )
     #v(5pt)
-    #grid(columns: 240pt, row-gutter: 6pt,
-      [*#profesores-title:* #profesores.join(", ", last: " y ")],
-      [*#autores-title:* #autores.join(", ", last: " y ")]
-    )
+    #align(right + bottom)[#grid(columns: 170pt, row-gutter: 6pt,
+      align(left)[*#profesores-title:* #profesores.join(", ", last: " y ")],
+      align(left)[*#autores-title:* #autores.join(", ", last: " y ")]
+    )]
   ]
 
   // Configuración del tamaño de página, márgenes y header

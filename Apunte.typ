@@ -7,24 +7,32 @@
   subtitulo: "",
   departamento: "dcc",
   profesores: ("Patricio Inostroza",), // Un arreglo de un elemento necesita una coma al final.
-  autores: ("Luciano Avegno", "Gustavo Joyo", "Julieta Coloma (Re-edición y correción)"), 
+  autores: ("Julieta Coloma", "Luciano Avegno", "Gustavo Joyo"), 
   curso: "CC3501 - Modelación y Computación Gráfica para Ingenieros",
 )
 
-#show link: set text(fuchsia)
+// make links blue
+#show link: set text(fill: rgb(0, 0, 255))
+
+// underline links
 #show link: underline
+#pagebreak()
+
+#outline(indent: 2em)
+
+#pagebreak()
 
 = Raster y Color
 Existen distintos modelos de color para presentar figuras, imágenes o impresiones. Por ejemplo están: [CMYK], [HSV], [YIQ], pero sin duda el más importante, y al cual todos convergen es [RGB]
 == Espacios de Color
 - *RGB*: Espacio de color que se basa en mezclar rojo, verde y azul. También se interpreta como un sistema aditivo dado que vamos a sumar los aportes de cada componente para obtener el color final.
-#figure(image("img/rasterColor/rgbCube.png", width: 30%), caption: [Cubo RGB])
+#figure(image("img/rasterColor/rgbCube.png", width: 22%), caption: [Cubo RGB])
 
 - *CMKY*: Este es un modelo sustractivo. Aquí el negro se encuentra al aportar todos los componentes al máximo. Se utiliza en impresoras.
-#figure(image("img/rasterColor/cmky.png", width: 30%), caption: [Combinar todos los componentes da negro])
+#figure(image("img/rasterColor/cmky.png", width: 22%), caption: [Combinar todos los componentes da negro])
 
 - *HSV*: Presenta una versión más intuitiva de la combinación de colores (ya que rgb no es muy humano)
-#figure(image("img/rasterColor/hsv.png", width: 30%), caption: [HSV mapeado en un cilindro])
+#figure(image("img/rasterColor/hsv.png", width: 22%), caption: [HSV mapeado en un cilindro])
 
 - *YIQ*: Usado en televisiones. Posee una cantidad reducida de colores.
 
@@ -38,12 +46,12 @@ Necesitamos 8 bits por componente, como son 3 componentes tenemos un total de 24
 
 Al incluir la transparencia se obtiene la siguiente fórmula $ c=a c_f = (1-a)c_b $
 Donde $c_f$ es el color de el frente, $c_b$ el color de atras y $a$ la transparencia o _alpha_ del frente.
-#v(70pt)
+
 == Raster y Vector
 - *Imagen raster*: Se compone de una matriz 2D donde a cada celda se le conocerá como un pixel, son usados en formatos: png, jpg, bmp o gif.
 - *Imagen vectorial*: Usan modelos paramétricos por cada figura representada donde no hay pérdida de nitidez en ninguna forma. Las letras tipográficas funcionan así, son usados en formatos: svg, eps y vrml.
 - *Pantalla Raster*: Define un arreglo 2D en pixeles centrados en coordenadas enteras de forma que se pueda iluminar un pixel con setpixel(x, y).
-
+#pagebreak()
 = Bresenham
 Ya pero ¿Cómo se dibuja una línea con pixeles?
 
@@ -51,16 +59,19 @@ El Algoritmo de Bresenham es eficiente a la hora de dibujar una línea en una pa
 
 Se tiene una línea recta desde $(x_0, y_0)$ a $(x_1, y_1)$ con pendiente $m in [0, 1]$. Tras pintar $(x_0, y_0)$ se quiere saber si pintar el pixel $(x_0+1, y_0)$ o $(x_0 + 1, y_0 + 1)$. En la figura se marcan los pixeles candidatos en verde.  
 #figure(image("img/bresenham/bresenham1.png", width: 50%), caption: [Pixeles candidatos en verde])
-Para saber cual pintar, se analiza el punto medio. Pero antes, tomemos la ecuación en su forma $f(x, y) = A x +B x +C =0$ donde
+Primero, tomemos la ecuación en su forma $f(x, y) = A x +B x +C =0$ donde
 - $A= Delta y=y_1-y_0$
 - $B=-Delta x=-(x_1-x_0)$
 - $C=(Delta x) c=(x_1 -x_0)c$
 Para cualquier punto de la recta $f(x, y) = 0$, $f(x, y)>0$ para puntos sobre la recta y $f(x, y)<0$ para puntos bajo la recta.
 
-Evaluamos el punto medio entre $y_0$ e $y_0+1$. Si $f(x_0+1, y_0+ 1/2 )$ es positivo, entonces la línea se acerca más al punto superior y pintamos el pixel $(x_0+1, y_0+1)$, de los contrario pintamos $(x_0+1, y_0)$ #footnote[Para una definición similar a la del profesor Patricio Inostroza lea aquí: https://www.cs.helsinki.fi/group/goa/mallinnus/lines/bresenh.html] 
-
+Evaluamos el punto medio entre $y_0$ e $y_0+1$. Si $f(x_0+1, y_0+ 1/2 )$ es positivo, entonces la línea se acerca más al punto superior y pintamos el pixel $(x_0+1, y_0+1)$, de los contrario pintamos $(x_0+1, y_0)$ #footnote[Para una definición similar a la del profesor Patricio Inostroza lea aquí: #underline[#text(blue)[https://www.cs.helsinki.fi/group/goa/mallinnus/lines/bresenh.html]]] 
+#pagebreak()
 Para pendientes fuera del rango $[0, 1]$ utilizamos simetría
 #figure(image("img/bresenham/bresenham2.png", width:50%), caption:[Uso de la simetría para aplicar el algortimo al resto de los octantes.])
+== Bresenham en el Círculo
+_to-do_
+#pagebreak()
 = Transformaciones
 Este documento pretende ser un punteo así que se mencionarán rápidamente las matrices de transformación. 
 - *Coordenadas Homogéneas*: Es un sistema de coordenadas utilizado en computación gráfica (y otras áreas) para la geometría proyectiva. Las matrices que se mencionarán a continuación están en coordenadas homogéneas.
@@ -75,14 +86,16 @@ $ mat(delim:"[", cos(theta), 0, sin(theta), 0;1, 0, 0, 0;-sin(theta), 0, cos(the
 $ mat(delim:"[", cos(theta), -sin(theta), 0, 0;sin(theta), cos(theta), 0, 0;0, 0, 1, 0;0, 0, 0, 1) $
 - *Traslación*: Trasladar el punto por las magnitudes $d_x$, $d_y$ y $d_z$ en sus respectivos ejes
 $ mat(delim: "[", 1, 0, 0, d_x;0, 1, 0, d_y;0, 0, 1, d_z;0, 0, 0, 1) $
+
 - *Reflexión*: La reflexión se extiende de el escalamiento pero con magnitudes negativas. Por ejemplo, la reflexión con respecto al eje Y cambia el signo del componente en X
 $ mat( delim: "[", -1, 0, 0, 0;0, 1, 0, 0; 0, 0, 1, 0; 0, 0, 0, 1) $
 - *Shearing*
 $ mat(delim:"[", 1, s_(x y), s_(x z), 0;s_(y x), 1, s_(y z), 0;s_(z x), s_(z y), 1, 0;0, 0, 0, 1) $
-#v(200pt)
+
 - *Composición de transformaciones*: Se pueden realizar varias transformaciónes juntas para obtener una gran matriz de transformación.
 $ mat(delim:"[", x'; y'; z'; 1) &= mat( delim: "[", -1, 0, 0, 0;0, 1, 0, 0; 0, 0, 1, 0; 0, 0, 0, 1)  dot mat(delim:"[", cos(theta), -sin(theta), 0, 0;sin(theta), cos(theta), 0, 0;0, 0, 1, 0;0, 0, 0, 1) dot mat(delim: "[", 
 s_x, 0, 0, 0;0, s_y, 0, 0;0, 0, s_z, 0;0,0,0, 1) dot mat(delim:"[", x; y; z; 1) \ mat(delim:"[", x'; y'; z'; 1) &= mat(delim:"[", ?, ?, ?, ?;?, ?, ?, ?;?, ?, ?, ?;?, ?, ?, ?) dot mat(delim: "[", x;y;z;1) $
+#pagebreak()
 = Viewing
 Lo que se debe rescatar de esta sección es principalmente las diferencias entre los distintos sistemas de coordenadas que usamos en las apis (OpenGL), en las pantallas u otra forma de representar imágenes.
 - *Coordenadas del dispositivo o Display Coordinates (DC)*: En este sistema se especificara en que parte de la pantalla mostrar información.
@@ -99,10 +112,12 @@ Transformar un punto del window $(x_w, y_w)$ a un punto en el viewport $(x_v, y_
 #figure(image("img/viewing/viewing5.png", width: 69%), caption:[Transformación de window a viewport.])
 Se tiene que
 $ X_v=(X_w - X_(w min)) dot (X_(v max) - X_(v min))/(X_(w max)- X_(w min)) \ Y_v = (Y_w - Y_(w min)) dot (Y_(v max) - Y_(v min))/(Y_(w max)- Y_(w min)) $
+#pagebreak()
 = Clipping
 Se quiere identificar los elementos que serán visibles en el window y los que no.
 - *Clipping sobre un punto*: Es simple. Dado los extremos del window $L, R, T$ y $B$, $(x, y)$ es visible si $L<=x<=R$ y $B<=y<=T$
 #figure(image("img/viewing/viewing6.png", width: 50%))
+
 - *Clipping sobre un segmento*: Primero podemos determinar los segmentos que si o si son invisibles, esto es si cumple alguno de los siguientes:
   - $x_1$ y $x_2 < L$
   - $x_1$ y $x_2 > R$
@@ -149,7 +164,7 @@ Luego, se expresan de la forma general $t dot p_k <= q_k$, donde $k=1, 2, 3$ o $
 - $p_2=Delta x, space q_2=x_max-x_1$, $t=q_2/p_2$
 - $p_3=-Delta y, space q_3=y_1-y_min$, $t=q_3/p_3$
 - $p_4=Delta y, space q_3=y_max-y_1$, $t=q_4/p_4$
-#v(50pt)
+
 Ahora, en una parametrización, si se toma $t in [0, 0.5]$  de dibujaría hasta la mitad de la recta
 #figure(image("img/clipping/clipping4.png", width: 50%))
 De esta misma forma, lo que se quiere es modificar los valores $t_1$ y $t_2$ en $t in [t_1, t_2]$ para dibujar exactamente el segmento visible de la recta.
@@ -172,4 +187,18 @@ $ t_2 = min(1, q_k/p_k) $
 Así se termina con la parametrización de solo el segmento visible de la recta.
 
 - *Algoritmo de Sutherland-Hodgaman para clipping*
+_to-do_
 - *Algoritmo de Weiler-Atherton para clipping*
+_to-do_
+= Gráfo de escena
+_to-do_
+= Proyecciones
+_to-do_
+= Splines
+_to-do_
+= Iluminación
+_to-do_
+= Visibilidad
+_to-do_
+= Fractales?
+_to-do_
